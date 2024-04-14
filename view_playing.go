@@ -44,9 +44,21 @@ func drawNowPlayingUI(window *glfw.Window, songDesc SongDesc, seconds int) {
 	aStr := currentSongFolder.Title + " / " + songDesc.SongName
 	aStrW, _ := ggCtx.MeasureString(aStr)
 	ggCtx.SetHexColor("#444")
-	ggCtx.DrawString(aStr, (float64(wWidth)-aStrW)/2, float64(displayFrameH)+90+fontSize)
+
+	aStrY := float64(displayFrameH) + 90 + fontSize
+	ggCtx.DrawString(aStr, (float64(wWidth)-aStrW)/2, aStrY)
 
 	window.SetTitle(aStr + "  | Songs223")
+
+	// write time elapsed
+	elapsedTimeStr := SecondsToMinutes(seconds)
+	ggCtx.DrawString(elapsedTimeStr, 50, aStrY)
+
+	// write stop time
+	totalSeconds, _ := l8f.GetVideoLength(songDesc.SongPath)
+	stopTimeStr := SecondsToMinutes(totalSeconds)
+	stopTimeStrW, _ := ggCtx.MeasureString(stopTimeStr)
+	ggCtx.DrawString(stopTimeStr, float64(wWidth)-50-stopTimeStrW, aStrY)
 
 	// draw controls
 	prevImg, _, _ := image.Decode(bytes.NewReader(PrevBytes))

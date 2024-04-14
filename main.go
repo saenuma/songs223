@@ -14,6 +14,7 @@ import (
 	"github.com/disintegration/imaging"
 	"github.com/fogleman/gg"
 	"github.com/go-gl/glfw/v3.3/glfw"
+	"github.com/saenuma/lyrics818/l8f"
 )
 
 const (
@@ -51,10 +52,38 @@ func main() {
 		t := time.Now()
 		glfw.PollEvents()
 
+		// update UI if song is playing
 		if currentPlayingSong.SongName != "" && !outsidePlayer && playerCancelFn != nil {
 			seconds := time.Since(startTime).Seconds()
 			// playTime.SetText(SecondsToMinutes(int(seconds)))
 			drawNowPlayingUI(window, currentPlayingSong, int(seconds))
+		}
+
+		// play next song or stop
+		if currentPlayingSong.SongName != "" && !outsidePlayer {
+			songLengthSeconds, _ := l8f.GetVideoLength(currentPlayingSong.SongPath)
+			if songLengthSeconds == int(time.Since(startTime).Seconds()) {
+				songs := getSongs(currentSongFolder)
+				var songIndex int
+				for index, songDesc := range songs {
+					if songDesc.SongName == currentPlayingSong.SongName {
+						songIndex = index
+						break
+					}
+				}
+				if songIndex != len(songs)-1 {
+					songDesc := getSongs(currentSongFolder)[songIndex+1]
+					drawNowPlayingUI(window, songDesc, 0)
+					window.SetMouseButtonCallback(nowPlayingMouseBtnCallback)
+
+					startTime = time.Now()
+					go playAudio(songDesc.SongPath, "00:00:00")
+				} else {
+					outsidePlayer = true
+					drawFolderUI(window, currentSongFolder)
+					window.SetMouseButtonCallback(folderUiMouseBtnCallback)
+				}
+			}
 		}
 
 		time.Sleep(time.Second/time.Duration(fps) - time.Since(t))
