@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"io/fs"
+	"math"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -10,6 +11,7 @@ import (
 	"time"
 
 	g143 "github.com/bankole7782/graphics143"
+	"github.com/disintegration/imaging"
 	"github.com/fogleman/gg"
 	"github.com/go-gl/glfw/v3.3/glfw"
 )
@@ -17,7 +19,7 @@ import (
 const (
 	fps      = 10
 	fontSize = 20
-	pageSize = 3
+	pageSize = 6
 
 	FoldersViewBtn    = 101
 	NowPlayingViewBtn = 102
@@ -45,6 +47,17 @@ func main() {
 
 		time.Sleep(time.Second/time.Duration(fps) - time.Since(t))
 	}
+}
+
+func totalPages() int {
+	rootPath, _ := GetRootPath()
+	dirFIs, err := os.ReadDir(rootPath)
+	if err != nil {
+		fmt.Println(err.Error())
+		return 0
+	}
+
+	return int(math.Ceil(float64(len(dirFIs)) / float64(pageSize)))
 }
 
 func getFolders(page int) []SongFolder {
@@ -199,29 +212,64 @@ func allDraws(window *glfw.Window, page int) {
 	ggCtx.DrawRectangle(10, float64(openWDBtnRS.OriginY+openWDBtnRS.Height+10), float64(wWidth)-20, 2)
 	ggCtx.Fill()
 
-	// songFolders := getFolders(page)
+	songFolders := getFolders(page)
 
-	// gutter := 10
-	// currentX := gutter
-	// currentY := gutter
+	gutter := 40
+	currentX := gutter
+	currentY := 80
 
-	// boxDimension := 55
-	// for i, aColor := range colors {
-	// 	ggCtx.SetHexColor(aColor)
-	// 	ggCtx.DrawRectangle(float64(currentX), float64(currentY), float64(boxDimension), float64(boxDimension))
-	// 	ggCtx.Fill()
-	// 	aColorRS := g143.RectSpecs{OriginX: currentX, OriginY: currentY, Width: boxDimension, Height: boxDimension}
-	// 	objCoords[i+1] = aColorRS
+	// album arts
+	boxDimension := 250
+	for i, songFolder := range songFolders {
+		songCoverImg, _ := imaging.Open(songFolder.Cover)
+		songCoverImg = imaging.Fit(songCoverImg, boxDimension, boxDimension, imaging.Lanczos)
 
-	// 	newX := currentX + boxDimension + gutter
-	// 	if newX > (wWidth - boxDimension) {
-	// 		currentY += boxDimension + gutter
-	// 		currentX = gutter
-	// 	} else {
-	// 		currentX += boxDimension + gutter
-	// 	}
+		ggCtx.DrawImage(songCoverImg, currentX, currentY)
+		ggCtx.SetHexColor("#444")
+		songCountStr := fmt.Sprintf("(%d songs)", songFolder.NumberOfSongs)
+		ggCtx.DrawString(songFolder.Title, float64(currentX)+20, float64(currentY)+fontSize+float64(boxDimension))
+		ggCtx.DrawString(songCountStr, float64(currentX)+20, float64(currentY)+fontSize*2+float64(boxDimension))
 
-	// }
+		aSongRS := g143.NRectSpecs(currentX, currentY, boxDimension, boxDimension+50)
+		objCoords[2000+i] = aSongRS
+
+		newX := currentX + boxDimension + gutter + 20
+		if newX > (wWidth - boxDimension) {
+			currentY += boxDimension + gutter + 20
+			currentX = gutter
+		} else {
+			currentX += boxDimension + gutter
+		}
+	}
+
+	// paging
+
+	aPageCurrentX := 40
+	aPageCurrentY := 720
+	aPageGutter := 10
+	for i := 1; i <= totalPages(); i++ {
+		aStr := fmt.Sprintf("%d", i)
+		aStrW, aStrH := ggCtx.MeasureString(aStr)
+		aPageBtnW := aStrW + 10
+		aPageBtnH := aStrH + 10
+
+		ggCtx.SetHexColor("#633232")
+		ggCtx.DrawRoundedRectangle(float64(aPageCurrentX), float64(aPageCurrentY), aPageBtnW, aPageBtnH, 5)
+		ggCtx.Fill()
+
+		ggCtx.SetHexColor("#fff")
+		ggCtx.DrawString(aStr, 5+float64(aPageCurrentX), float64(aPageCurrentY)+fontSize)
+
+		aPageBtnRS := g143.NRectSpecs(aPageCurrentX, aPageCurrentY, int(aPageBtnW), int(aPageBtnH))
+		objCoords[3000+i] = aPageBtnRS
+		newX := aPageCurrentX + int(aPageBtnW) + aPageGutter
+		if newX > (wWidth - int(aPageBtnW)) {
+			currentY += int(aPageBtnW) + aPageGutter
+			aPageCurrentX = 40
+		} else {
+			aPageCurrentX += int(aPageBtnW) + aPageGutter
+		}
+	}
 
 	// send the frame to glfw window
 	windowRS := g143.RectSpecs{Width: wWidth, Height: wHeight, OriginX: 0, OriginY: 0}
