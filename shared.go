@@ -1,9 +1,12 @@
 package main
 
 import (
+	"fmt"
 	"math/rand"
 	"os"
+	"os/exec"
 	"path/filepath"
+	"runtime"
 	"strings"
 
 	"github.com/pkg/errors"
@@ -39,4 +42,23 @@ func UntestedRandomString(length int) string {
 		b[i] = letters[rand.Intn(len(letters))]
 	}
 	return string(b)
+}
+
+func externalLaunch(p string) {
+	if runtime.GOOS == "windows" {
+		exec.Command("cmd", "/C", "start", p).Run()
+	} else if runtime.GOOS == "linux" {
+		exec.Command("xdg-open", p).Run()
+	}
+}
+
+func SecondsToMinutes(inSeconds int) string {
+	minutes := inSeconds / 60
+	seconds := inSeconds % 60
+	secondsStr := fmt.Sprintf("%d", seconds)
+	if seconds < 10 {
+		secondsStr = "0" + secondsStr
+	}
+	str := fmt.Sprintf("%d:%s", minutes, secondsStr)
+	return str
 }

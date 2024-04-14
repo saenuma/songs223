@@ -117,8 +117,7 @@ func getFolders(page int) []SongFolder {
 	return ret
 }
 
-func drawFirstUI(window *glfw.Window, page int) {
-	currentPage = page
+func drawTopBar(window *glfw.Window) *gg.Context {
 	wWidth, wHeight := window.GetSize()
 
 	// frame buffer
@@ -214,6 +213,15 @@ func drawFirstUI(window *glfw.Window, page int) {
 	ggCtx.DrawRectangle(10, float64(openWDBtnRS.OriginY+openWDBtnRS.Height+10), float64(wWidth)-20, 2)
 	ggCtx.Fill()
 
+	return ggCtx
+}
+
+func drawFirstUI(window *glfw.Window, page int) {
+	currentPage = page
+	wWidth, wHeight := window.GetSize()
+
+	ggCtx := drawTopBar(window)
+
 	songFolders := getFolders(page)
 
 	gutter := 40
@@ -233,7 +241,7 @@ func drawFirstUI(window *glfw.Window, page int) {
 		ggCtx.DrawString(songCountStr, float64(currentX)+20, float64(currentY)+fontSize*2+float64(boxDimension))
 
 		aSongRS := g143.NRectSpecs(currentX, currentY, boxDimension, boxDimension+50)
-		objCoords[2000+i] = aSongRS
+		objCoords[2000+i+1] = aSongRS
 
 		newX := currentX + boxDimension + gutter + 20
 		if newX > (wWidth - boxDimension) {
@@ -311,11 +319,34 @@ func mouseBtnCallback(window *glfw.Window, button glfw.MouseButton, action glfw.
 		return
 	}
 
-	// for generated buttons
+	topBarPartOfMouseCallback(window, widgetCode)
+
+	// for generated folder buttons
+	if widgetCode > 2000 && widgetCode < 3000 {
+		folderIndex := widgetCode - 2000 - 1
+		gottenFolder := getFolders(currentPage)[folderIndex]
+		drawFolderUI(window, gottenFolder)
+		window.SetMouseButtonCallback(folderUiMouseBtnCallback)
+	}
+
+	// for generated page buttons
 	if widgetCode > 3000 && widgetCode < 4000 {
 		pageNum := widgetCode - 3000
 		objCoords = make(map[int]g143.RectSpecs)
 		drawFirstUI(window, pageNum)
+	}
+
+}
+
+func topBarPartOfMouseCallback(window *glfw.Window, widgetCode int) {
+	switch widgetCode {
+	case OpenWDBtn:
+		rootPath, _ := GetRootPath()
+		externalLaunch(rootPath)
+
+	case FoldersViewBtn:
+		drawFirstUI(window, currentPage)
+		window.SetMouseButtonCallback(mouseBtnCallback)
 	}
 
 }

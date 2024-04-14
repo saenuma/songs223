@@ -8,10 +8,11 @@ require (
 	github.com/fogleman/gg v1.3.0
 	github.com/go-gl/glfw/v3.3/glfw v0.0.0-20240307211618-a69d953ea142
 	github.com/pkg/errors v0.9.1
+	github.com/saenuma/lyrics818 v0.0.0-20240414102808-5ba752ac5515
 )
 
 require (
-	github.com/go-gl/gl v0.0.0-20211210172815-726fda9656d6 // indirect
+	github.com/go-gl/gl v0.0.0-20231021071112-07e5d0ea2e71 // indirect
 	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0 // indirect
-	golang.org/x/image v0.0.0-20191009234506-e7c1f5e7dbb8 // indirect
+	golang.org/x/image v0.13.0 // indirect
 )

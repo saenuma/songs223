@@ -5,3 +5,9 @@ type SongFolder struct {
 	Cover         string
 	NumberOfSongs int
 }
+
+type SongDesc struct {
+	SongName string
+	SongPath string
+	Length   string
+}
