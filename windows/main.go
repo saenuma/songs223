@@ -45,12 +45,6 @@ func main() {
 	// respond to the mouse
 	window.SetMouseButtonCallback(mouseBtnCallback)
 
-	window.SetCloseCallback(func(w *glfw.Window) {
-		if runtime.GOOS == "linux" && playerCancelFn != nil {
-			playerCancelFn()
-		}
-	})
-
 	window.SetScrollCallback(firstUIScrollCallback)
 
 	for !window.ShouldClose() {

@@ -2,7 +2,6 @@ package main
 
 import (
 	"bytes"
-	"context"
 	"os"
 	"path/filepath"
 	"time"
@@ -12,7 +11,6 @@ import (
 	"github.com/saenuma/lyrics818/l8f"
 )
 
-var playerCancelFn context.CancelFunc
 var GlobalOtoCtx *oto.Context
 var currentPlayer *oto.Player
 
