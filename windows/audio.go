@@ -76,7 +76,7 @@ func playAudio(l8fPath string) {
 
 	// We can wait for the sound to finish playing using something like this
 	for player.IsPlaying() {
-		time.Sleep(time.Millisecond)
+		time.Sleep(time.Second)
 	}
 
 }
@@ -85,6 +85,6 @@ func continueAudio() {
 	currentPlayer.Play()
 	// We can wait for the sound to finish playing using something like this
 	for currentPlayer.IsPlaying() {
-		time.Sleep(time.Millisecond)
+		time.Sleep(time.Second)
 	}
 }
