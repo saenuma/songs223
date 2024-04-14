@@ -31,6 +31,7 @@ const (
 var objCoords map[int]g143.RectSpecs
 var currentPage int
 var outsidePlayer bool
+var scrollEventCount = 0
 
 func main() {
 	runtime.LockOSThread()
@@ -43,11 +44,15 @@ func main() {
 
 	// respond to the mouse
 	window.SetMouseButtonCallback(mouseBtnCallback)
+
 	window.SetCloseCallback(func(w *glfw.Window) {
 		if runtime.GOOS == "linux" && playerCancelFn != nil {
 			playerCancelFn()
 		}
 	})
+
+	window.SetScrollCallback(firstUIScrollCallback)
+
 	for !window.ShouldClose() {
 		t := time.Now()
 		glfw.PollEvents()
@@ -374,6 +379,7 @@ func mouseBtnCallback(window *glfw.Window, button glfw.MouseButton, action glfw.
 		gottenFolder := getFolders(currentPage)[folderIndex]
 		drawFolderUI(window, gottenFolder)
 		window.SetMouseButtonCallback(folderUiMouseBtnCallback)
+		window.SetScrollCallback(nil)
 	}
 
 	// for generated page buttons
@@ -396,6 +402,7 @@ func topBarPartOfMouseCallback(window *glfw.Window, widgetCode int) {
 		objCoords = make(map[int]g143.RectSpecs)
 		drawFirstUI(window, currentPage)
 		window.SetMouseButtonCallback(mouseBtnCallback)
+		window.SetScrollCallback(firstUIScrollCallback)
 
 	case NowPlayingViewBtn:
 		if currentPlayingSong.SongName != "" {
@@ -404,6 +411,7 @@ func topBarPartOfMouseCallback(window *glfw.Window, widgetCode int) {
 
 			drawNowPlayingUI(window, currentPlayingSong, int(seconds))
 			window.SetMouseButtonCallback(nowPlayingMouseBtnCallback)
+			window.SetScrollCallback(nil)
 		}
 
 	case InfoBtn:
@@ -411,6 +419,23 @@ func topBarPartOfMouseCallback(window *glfw.Window, widgetCode int) {
 		objCoords = make(map[int]g143.RectSpecs)
 		drawInfoUI(window)
 		window.SetMouseButtonCallback(infoUIMouseBtnCallback)
+		window.SetScrollCallback(nil)
+	}
+
+}
+
+func firstUIScrollCallback(window *glfw.Window, xoff, yoff float64) {
+	if scrollEventCount != 5 {
+		scrollEventCount += 1
+		return
+	}
+
+	scrollEventCount = 0
+
+	if xoff == 0 && yoff == 1 && currentPage != totalPages() {
+		drawFirstUI(window, currentPage+1)
+	} else if xoff == 0 && yoff == -1 && currentPage != 1 {
+		drawFirstUI(window, currentPage-1)
 	}
 
 }
