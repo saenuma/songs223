@@ -118,7 +118,7 @@ func folderUiMouseBtnCallback(window *glfw.Window, button glfw.MouseButton, acti
 		window.SetMouseButtonCallback(nowPlayingMouseBtnCallback)
 
 		startTime = time.Now()
-		go playAudio(songDesc.SongPath, "00:00:00")
+		go playAudio(songDesc.SongPath)
 	}
 
 }

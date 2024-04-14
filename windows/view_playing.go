@@ -120,8 +120,8 @@ func nowPlayingMouseBtnCallback(window *glfw.Window, button glfw.MouseButton, ac
 
 	switch widgetCode {
 	case PrevBtn:
-		if playerCancelFn != nil {
-			playerCancelFn()
+		if currentPlayer != nil {
+			currentPlayer.Pause()
 		}
 
 		objCoords = make(map[int]g143.RectSpecs)
@@ -140,7 +140,7 @@ func nowPlayingMouseBtnCallback(window *glfw.Window, button glfw.MouseButton, ac
 			window.SetMouseButtonCallback(nowPlayingMouseBtnCallback)
 
 			startTime = time.Now()
-			go playAudio(songDesc.SongPath, "00:00:00")
+			go playAudio(songDesc.SongPath)
 		} else {
 			outsidePlayer = true
 			drawFolderUI(window, currentSongFolder)
@@ -179,8 +179,8 @@ func nowPlayingMouseBtnCallback(window *glfw.Window, button glfw.MouseButton, ac
 		}
 
 	case NextBtn:
-		if playerCancelFn != nil {
-			playerCancelFn()
+		if currentPlayer != nil {
+			currentPlayer.Pause()
 		}
 
 		objCoords = make(map[int]g143.RectSpecs)
@@ -199,7 +199,7 @@ func nowPlayingMouseBtnCallback(window *glfw.Window, button glfw.MouseButton, ac
 			window.SetMouseButtonCallback(nowPlayingMouseBtnCallback)
 
 			startTime = time.Now()
-			go playAudio(songDesc.SongPath, "00:00:00")
+			go playAudio(songDesc.SongPath)
 		} else {
 			outsidePlayer = true
 			drawFolderUI(window, currentSongFolder)

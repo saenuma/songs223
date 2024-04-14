@@ -82,7 +82,7 @@ func main() {
 					window.SetMouseButtonCallback(nowPlayingMouseBtnCallback)
 
 					startTime = time.Now()
-					go playAudio(songDesc.SongPath, "00:00:00")
+					go playAudio(songDesc.SongPath)
 				} else {
 					outsidePlayer = true
 					drawFolderUI(window, currentSongFolder)

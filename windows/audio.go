@@ -16,7 +16,7 @@ var playerCancelFn context.CancelFunc
 var GlobalOtoCtx *oto.Context
 var currentPlayer *oto.Player
 
-func playAudio(l8fPath, seek string) {
+func playAudio(l8fPath string) {
 	rootPath, _ := GetRootPath()
 
 	audioBytes, err := l8f.ReadAudio(l8fPath)
