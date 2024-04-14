@@ -17,7 +17,7 @@ import (
 )
 
 const (
-	fps      = 10
+	fps      = 2
 	fontSize = 20
 	pageSize = 8
 

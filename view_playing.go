@@ -19,15 +19,19 @@ func drawNowPlayingUI(window *glfw.Window, songDesc SongDesc, seconds int) {
 
 	ggCtx := drawTopBar(window)
 
-	// ggCtx.SetHexColor("#444")
-	// ggCtx.DrawString(currentSongFolder.Title+" / "+songDesc.SongName, 200, 80+30)
-
-	// scale down the image
+	// scale down the image and write frame
 	currFrame, _ := l8f.ReadLaptopFrame(songDesc.SongPath, seconds)
 	displayFrameW := int(scale * float64((*currFrame).Bounds().Dx()))
 	displayFrameH := int(scale * float64((*currFrame).Bounds().Dy()))
 	tmp := imaging.Fit(*currFrame, displayFrameW, displayFrameH, imaging.Lanczos)
-	ggCtx.DrawImage(tmp, (wWidth-displayFrameW)/2, 100)
+	ggCtx.DrawImage(tmp, (wWidth-displayFrameW)/2, 80)
+
+	aStr := currentSongFolder.Title + " / " + songDesc.SongName
+	aStrW, _ := ggCtx.MeasureString(aStr)
+	ggCtx.SetHexColor("#444")
+	ggCtx.DrawString(aStr, (float64(wWidth)-aStrW)/2, float64(displayFrameH)+90+fontSize)
+
+	window.SetTitle(aStr + "  | Songs223")
 
 	// send the frame to glfw window
 	windowRS := g143.RectSpecs{Width: wWidth, Height: wHeight, OriginX: 0, OriginY: 0}
