@@ -19,7 +19,7 @@ import (
 const (
 	fps      = 10
 	fontSize = 20
-	pageSize = 6
+	pageSize = 8
 
 	FoldersViewBtn    = 101
 	NowPlayingViewBtn = 102
@@ -28,6 +28,7 @@ const (
 )
 
 var objCoords map[int]g143.RectSpecs
+var currentPage int
 
 func main() {
 	runtime.LockOSThread()
@@ -36,7 +37,7 @@ func main() {
 	objCoords = make(map[int]g143.RectSpecs)
 
 	window := g143.NewWindow(1200, 800, "Songs223: media player of songs with embedded lyrics", false)
-	allDraws(window, 1)
+	drawFirstUI(window, 1)
 
 	// respond to the mouse
 	window.SetMouseButtonCallback(mouseBtnCallback)
@@ -116,7 +117,8 @@ func getFolders(page int) []SongFolder {
 	return ret
 }
 
-func allDraws(window *glfw.Window, page int) {
+func drawFirstUI(window *glfw.Window, page int) {
+	currentPage = page
 	wWidth, wHeight := window.GetSize()
 
 	// frame buffer
@@ -307,6 +309,13 @@ func mouseBtnCallback(window *glfw.Window, button glfw.MouseButton, action glfw.
 
 	if widgetCode == 0 {
 		return
+	}
+
+	// for generated buttons
+	if widgetCode > 3000 && widgetCode < 4000 {
+		pageNum := widgetCode - 3000
+		objCoords = make(map[int]g143.RectSpecs)
+		drawFirstUI(window, pageNum)
 	}
 
 }
