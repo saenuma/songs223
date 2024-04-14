@@ -118,10 +118,12 @@ func getFolders(page int) []SongFolder {
 	endIndex := beginIndex + pageSize
 
 	var toCheckDirFIs []fs.DirEntry
-	if endIndex > len(dirFIs) {
-		toCheckDirFIs = dirFIs[beginIndex:]
+	if page == 1 {
+		toCheckDirFIs = dirFIs[:pageSize+1]
+	} else if endIndex > len(dirFIs) {
+		toCheckDirFIs = dirFIs[beginIndex+1:]
 	} else {
-		toCheckDirFIs = dirFIs[beginIndex:endIndex]
+		toCheckDirFIs = dirFIs[beginIndex+1 : endIndex+1]
 	}
 
 	for _, dirFI := range toCheckDirFIs {
@@ -270,6 +272,7 @@ func drawFirstUI(window *glfw.Window, page int) {
 
 	// album arts
 	boxDimension := 250
+	fmt.Println(len(songFolders))
 	for i, songFolder := range songFolders {
 		songCoverImg, _ := imaging.Open(songFolder.Cover)
 		songCoverImg = imaging.Fit(songCoverImg, boxDimension, boxDimension, imaging.Lanczos)
