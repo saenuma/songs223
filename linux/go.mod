@@ -1,4 +1,4 @@
-module github.com/saenuma/songs223a
+module github.com/saenuma/songs223a/linux
 
 go 1.22.2
 
