@@ -18,7 +18,7 @@ import (
 )
 
 const (
-	fps      = 2
+	fps      = 4
 	fontSize = 20
 	pageSize = 8
 
@@ -272,7 +272,6 @@ func drawFirstUI(window *glfw.Window, page int) {
 
 	// album arts
 	boxDimension := 250
-	fmt.Println(len(songFolders))
 	for i, songFolder := range songFolders {
 		songCoverImg, _ := imaging.Open(songFolder.Cover)
 		songCoverImg = imaging.Fit(songCoverImg, boxDimension, boxDimension, imaging.Lanczos)
@@ -306,7 +305,11 @@ func drawFirstUI(window *glfw.Window, page int) {
 		aPageBtnW := aStrW + 10
 		aPageBtnH := aStrH + 10
 
-		ggCtx.SetHexColor("#633232")
+		if i == currentPage {
+			ggCtx.SetHexColor("#633232")
+		} else {
+			ggCtx.SetHexColor("#633260")
+		}
 		ggCtx.DrawRoundedRectangle(float64(aPageCurrentX), float64(aPageCurrentY), aPageBtnW, aPageBtnH, 5)
 		ggCtx.Fill()
 
@@ -402,6 +405,12 @@ func topBarPartOfMouseCallback(window *glfw.Window, widgetCode int) {
 			drawNowPlayingUI(window, currentPlayingSong, int(seconds))
 			window.SetMouseButtonCallback(nowPlayingMouseBtnCallback)
 		}
+
+	case InfoBtn:
+		outsidePlayer = true
+		objCoords = make(map[int]g143.RectSpecs)
+		drawInfoUI(window)
+		window.SetMouseButtonCallback(infoUIMouseBtnCallback)
 	}
 
 }
