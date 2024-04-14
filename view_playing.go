@@ -107,6 +107,34 @@ func nowPlayingMouseBtnCallback(window *glfw.Window, button glfw.MouseButton, ac
 	topBarPartOfMouseCallback(window, widgetCode)
 
 	switch widgetCode {
+	case PrevBtn:
+		if playerCancelFn != nil {
+			playerCancelFn()
+		}
+
+		objCoords = make(map[int]g143.RectSpecs)
+
+		songs := getSongs(currentSongFolder)
+		var songIndex int
+		for index, songDesc := range songs {
+			if songDesc.SongName == currentPlayingSong.SongName {
+				songIndex = index
+				break
+			}
+		}
+		if songIndex != 0 {
+			songDesc := getSongs(currentSongFolder)[songIndex-1]
+			drawNowPlayingUI(window, songDesc, 0)
+			window.SetMouseButtonCallback(nowPlayingMouseBtnCallback)
+
+			startTime = time.Now()
+			go playAudio(songDesc.SongPath, "00:00:00")
+		} else {
+			outsidePlayer = true
+			drawFolderUI(window, currentSongFolder)
+			window.SetMouseButtonCallback(folderUiMouseBtnCallback)
+		}
+
 	case PlayPauseBtn:
 		if playerCancelFn != nil {
 			playerCancelFn()
@@ -136,6 +164,34 @@ func nowPlayingMouseBtnCallback(window *glfw.Window, button glfw.MouseButton, ac
 			startTime = time.Unix(startTimeUnix, 0)
 
 			go playAudio(currentPlayingSong.SongPath, "00:"+SecondsToMinutes(pausedSeconds))
+		}
+
+	case NextBtn:
+		if playerCancelFn != nil {
+			playerCancelFn()
+		}
+
+		objCoords = make(map[int]g143.RectSpecs)
+
+		songs := getSongs(currentSongFolder)
+		var songIndex int
+		for index, songDesc := range songs {
+			if songDesc.SongName == currentPlayingSong.SongName {
+				songIndex = index
+				break
+			}
+		}
+		if songIndex != len(songs)-1 {
+			songDesc := getSongs(currentSongFolder)[songIndex+1]
+			drawNowPlayingUI(window, songDesc, 0)
+			window.SetMouseButtonCallback(nowPlayingMouseBtnCallback)
+
+			startTime = time.Now()
+			go playAudio(songDesc.SongPath, "00:00:00")
+		} else {
+			outsidePlayer = true
+			drawFolderUI(window, currentSongFolder)
+			window.SetMouseButtonCallback(folderUiMouseBtnCallback)
 		}
 	}
 }
