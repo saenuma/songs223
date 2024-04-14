@@ -36,6 +36,7 @@ func getSongs(songFolder SongFolder) []SongDesc {
 
 	return songs
 }
+
 func drawFolderUI(window *glfw.Window, songFolder SongFolder) {
 	wWidth, wHeight := window.GetSize()
 

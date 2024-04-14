@@ -51,7 +51,7 @@ func main() {
 		t := time.Now()
 		glfw.PollEvents()
 
-		if currentPlayingSong.SongName != "" && !outsidePlayer {
+		if currentPlayingSong.SongName != "" && !outsidePlayer && playerCancelFn != nil {
 			seconds := time.Since(startTime).Seconds()
 			// playTime.SetText(SecondsToMinutes(int(seconds)))
 			drawNowPlayingUI(window, currentPlayingSong, int(seconds))

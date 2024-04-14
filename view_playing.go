@@ -1,15 +1,30 @@
 package main
 
 import (
+	"bytes"
+	"image"
+	"time"
+
 	g143 "github.com/bankole7782/graphics143"
 	"github.com/disintegration/imaging"
+	"github.com/fogleman/gg"
 	"github.com/go-gl/glfw/v3.3/glfw"
 	"github.com/saenuma/lyrics818/l8f"
 )
 
 var currentPlayingSong SongDesc
 
-const scale = 0.8
+const (
+	scale   = 0.8
+	boxSize = 40
+
+	PlayPauseBtn = 501
+	PrevBtn      = 502
+	NextBtn      = 503
+)
+
+var pausedSeconds int
+var tmpNowPlayingImg image.Image
 
 func drawNowPlayingUI(window *glfw.Window, songDesc SongDesc, seconds int) {
 	outsidePlayer = false
@@ -33,6 +48,30 @@ func drawNowPlayingUI(window *glfw.Window, songDesc SongDesc, seconds int) {
 
 	window.SetTitle(aStr + "  | Songs223")
 
+	// draw controls
+	prevImg, _, _ := image.Decode(bytes.NewReader(PrevBytes))
+	prevImg = imaging.Fit(prevImg, boxSize, boxSize, imaging.Lanczos)
+	pauseImg, _, _ := image.Decode(bytes.NewReader(PauseBytes))
+	pauseImg = imaging.Fit(pauseImg, boxSize, boxSize, imaging.Lanczos)
+	nextImg, _, _ := image.Decode(bytes.NewReader(NextBytes))
+	nextImg = imaging.Fit(nextImg, boxSize, boxSize, imaging.Lanczos)
+
+	controlsY := displayFrameH + 90 + fontSize + 20
+	ggCtx.DrawImage(prevImg, 500, controlsY)
+	prevRS := g143.NRectSpecs(500, controlsY, boxSize, boxSize)
+	objCoords[PrevBtn] = prevRS
+
+	ggCtx.DrawImage(pauseImg, 600, controlsY)
+	pauseRS := g143.NRectSpecs(600, controlsY, boxSize, boxSize)
+	objCoords[PlayPauseBtn] = pauseRS
+
+	ggCtx.DrawImage(nextImg, 700, controlsY)
+	nextRS := g143.NRectSpecs(700, controlsY, boxSize, boxSize)
+	objCoords[NextBtn] = nextRS
+
+	// save the frame
+	tmpNowPlayingImg = ggCtx.Image()
+
 	// send the frame to glfw window
 	windowRS := g143.RectSpecs{Width: wWidth, Height: wHeight, OriginX: 0, OriginY: 0}
 	g143.DrawImage(wWidth, wHeight, ggCtx.Image(), windowRS)
@@ -48,14 +87,14 @@ func nowPlayingMouseBtnCallback(window *glfw.Window, button glfw.MouseButton, ac
 	xPosInt := int(xPos)
 	yPosInt := int(yPos)
 
-	// wWidth, wHeight := window.GetSize()
+	wWidth, wHeight := window.GetSize()
 
-	// var widgetRS g143.RectSpecs
+	var widgetRS g143.RectSpecs
 	var widgetCode int
 
 	for code, RS := range objCoords {
 		if g143.InRectSpecs(RS, xPosInt, yPosInt) {
-			// widgetRS = RS
+			widgetRS = RS
 			widgetCode = code
 			break
 		}
@@ -67,4 +106,36 @@ func nowPlayingMouseBtnCallback(window *glfw.Window, button glfw.MouseButton, ac
 
 	topBarPartOfMouseCallback(window, widgetCode)
 
+	switch widgetCode {
+	case PlayPauseBtn:
+		if playerCancelFn != nil {
+			playerCancelFn()
+			playerCancelFn = nil
+			seconds := time.Since(startTime).Seconds()
+			pausedSeconds = int(seconds)
+
+			playImg, _, _ := image.Decode(bytes.NewReader(PlayBytes))
+			playImg = imaging.Fit(playImg, boxSize, boxSize, imaging.Lanczos)
+
+			ggCtx := gg.NewContextForImage(tmpNowPlayingImg)
+			ggCtx.SetHexColor("#fff")
+			ggCtx.DrawRectangle(float64(widgetRS.OriginX), float64(widgetRS.OriginY), boxSize, boxSize)
+			ggCtx.Fill()
+			ggCtx.DrawImage(playImg, widgetRS.OriginX, widgetRS.OriginY)
+
+			// send the frame to glfw window
+			windowRS := g143.RectSpecs{Width: wWidth, Height: wHeight, OriginX: 0, OriginY: 0}
+			g143.DrawImage(wWidth, wHeight, ggCtx.Image(), windowRS)
+			window.SwapBuffers()
+		} else {
+			objCoords = make(map[int]g143.RectSpecs)
+			drawNowPlayingUI(window, currentPlayingSong, pausedSeconds)
+			window.SetMouseButtonCallback(nowPlayingMouseBtnCallback)
+
+			startTimeUnix := time.Now().Unix() - int64(pausedSeconds)
+			startTime = time.Unix(startTimeUnix, 0)
+
+			go playAudio(currentPlayingSong.SongPath, "00:"+SecondsToMinutes(pausedSeconds))
+		}
+	}
 }
