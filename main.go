@@ -41,7 +41,11 @@ func main() {
 
 	// respond to the mouse
 	window.SetMouseButtonCallback(mouseBtnCallback)
-
+	window.SetCloseCallback(func(w *glfw.Window) {
+		if runtime.GOOS == "linux" && playerCancelFn != nil {
+			playerCancelFn()
+		}
+	})
 	for !window.ShouldClose() {
 		t := time.Now()
 		glfw.PollEvents()
@@ -323,6 +327,7 @@ func mouseBtnCallback(window *glfw.Window, button glfw.MouseButton, action glfw.
 
 	// for generated folder buttons
 	if widgetCode > 2000 && widgetCode < 3000 {
+		objCoords = make(map[int]g143.RectSpecs)
 		folderIndex := widgetCode - 2000 - 1
 		gottenFolder := getFolders(currentPage)[folderIndex]
 		drawFolderUI(window, gottenFolder)
@@ -331,8 +336,8 @@ func mouseBtnCallback(window *glfw.Window, button glfw.MouseButton, action glfw.
 
 	// for generated page buttons
 	if widgetCode > 3000 && widgetCode < 4000 {
-		pageNum := widgetCode - 3000
 		objCoords = make(map[int]g143.RectSpecs)
+		pageNum := widgetCode - 3000
 		drawFirstUI(window, pageNum)
 	}
 
@@ -345,8 +350,16 @@ func topBarPartOfMouseCallback(window *glfw.Window, widgetCode int) {
 		externalLaunch(rootPath)
 
 	case FoldersViewBtn:
+		objCoords = make(map[int]g143.RectSpecs)
 		drawFirstUI(window, currentPage)
 		window.SetMouseButtonCallback(mouseBtnCallback)
+
+	case NowPlayingViewBtn:
+		if currentPlayingSong.SongName != "" {
+			objCoords = make(map[int]g143.RectSpecs)
+			drawNowPlayingUI(window, currentPlayingSong)
+			window.SetMouseButtonCallback(nowPlayingMouseBtnCallback)
+		}
 	}
 
 }
