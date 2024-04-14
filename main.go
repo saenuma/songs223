@@ -123,7 +123,9 @@ func getFolders(page int) []SongFolder {
 	endIndex := beginIndex + pageSize
 
 	var toCheckDirFIs []fs.DirEntry
-	if page == 1 {
+	if len(dirFIs) < pageSize {
+		toCheckDirFIs = dirFIs
+	} else if page == 1 {
 		toCheckDirFIs = dirFIs[:pageSize+1]
 	} else if endIndex > len(dirFIs) {
 		toCheckDirFIs = dirFIs[beginIndex+1:]
