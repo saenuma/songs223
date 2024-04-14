@@ -4,6 +4,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
 
 	g143 "github.com/bankole7782/graphics143"
 	"github.com/disintegration/imaging"
@@ -12,6 +13,7 @@ import (
 )
 
 var currentSongFolder SongFolder
+var startTime time.Time
 
 func getSongs(songFolder SongFolder) []SongDesc {
 	rootPath, _ := GetRootPath()
@@ -111,9 +113,10 @@ func folderUiMouseBtnCallback(window *glfw.Window, button glfw.MouseButton, acti
 
 		songIndex := widgetCode - 4001
 		songDesc := getSongs(currentSongFolder)[songIndex]
-		drawNowPlayingUI(window, songDesc)
+		drawNowPlayingUI(window, songDesc, 0)
 		window.SetMouseButtonCallback(nowPlayingMouseBtnCallback)
 
+		startTime = time.Now()
 		go playAudio(songDesc.SongPath, "00:00:00")
 	}
 

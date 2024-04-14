@@ -11,7 +11,8 @@ var currentPlayingSong SongDesc
 
 const scale = 0.8
 
-func drawNowPlayingUI(window *glfw.Window, songDesc SongDesc) {
+func drawNowPlayingUI(window *glfw.Window, songDesc SongDesc, seconds int) {
+	outsidePlayer = false
 	wWidth, wHeight := window.GetSize()
 
 	currentPlayingSong = songDesc
@@ -22,7 +23,7 @@ func drawNowPlayingUI(window *glfw.Window, songDesc SongDesc) {
 	// ggCtx.DrawString(currentSongFolder.Title+" / "+songDesc.SongName, 200, 80+30)
 
 	// scale down the image
-	currFrame, _ := l8f.ReadLaptopFrame(songDesc.SongPath, 0)
+	currFrame, _ := l8f.ReadLaptopFrame(songDesc.SongPath, seconds)
 	displayFrameW := int(scale * float64((*currFrame).Bounds().Dx()))
 	displayFrameH := int(scale * float64((*currFrame).Bounds().Dy()))
 	tmp := imaging.Fit(*currFrame, displayFrameW, displayFrameH, imaging.Lanczos)

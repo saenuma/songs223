@@ -29,6 +29,7 @@ const (
 
 var objCoords map[int]g143.RectSpecs
 var currentPage int
+var outsidePlayer bool
 
 func main() {
 	runtime.LockOSThread()
@@ -49,6 +50,12 @@ func main() {
 	for !window.ShouldClose() {
 		t := time.Now()
 		glfw.PollEvents()
+
+		if currentPlayingSong.SongName != "" && !outsidePlayer {
+			seconds := time.Since(startTime).Seconds()
+			// playTime.SetText(SecondsToMinutes(int(seconds)))
+			drawNowPlayingUI(window, currentPlayingSong, int(seconds))
+		}
 
 		time.Sleep(time.Second/time.Duration(fps) - time.Since(t))
 	}
@@ -350,6 +357,7 @@ func topBarPartOfMouseCallback(window *glfw.Window, widgetCode int) {
 		externalLaunch(rootPath)
 
 	case FoldersViewBtn:
+		outsidePlayer = true
 		objCoords = make(map[int]g143.RectSpecs)
 		drawFirstUI(window, currentPage)
 		window.SetMouseButtonCallback(mouseBtnCallback)
@@ -357,7 +365,9 @@ func topBarPartOfMouseCallback(window *glfw.Window, widgetCode int) {
 	case NowPlayingViewBtn:
 		if currentPlayingSong.SongName != "" {
 			objCoords = make(map[int]g143.RectSpecs)
-			drawNowPlayingUI(window, currentPlayingSong)
+			seconds := time.Since(startTime).Seconds()
+
+			drawNowPlayingUI(window, currentPlayingSong, int(seconds))
 			window.SetMouseButtonCallback(nowPlayingMouseBtnCallback)
 		}
 	}
