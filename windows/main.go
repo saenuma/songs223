@@ -154,7 +154,9 @@ func getFolders(page int) []SongFolder {
 			}
 		}
 
-		ret = append(ret, SongFolder{dirFI.Name(), coverPath, l8fCount})
+		if l8fCount != 0 {
+			ret = append(ret, SongFolder{dirFI.Name(), coverPath, l8fCount})
+		}
 	}
 
 	return ret
