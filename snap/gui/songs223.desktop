@@ -1,0 +1,6 @@
+[Desktop Entry]
+Version=1.3.0
+Type=Application
+Name=Songs223
+Exec=songs223
+Icon=${SNAP}/meta/gui/songs223.png

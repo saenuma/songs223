@@ -1,0 +1,81 @@
+name: songs223 # you probably want to 'snapcraft register <name>'
+base: core22 # the base snap is the execution environment for this snap
+version: '1.0.1' # just for humans, typically '1.2+git' or '1.3.2'
+summary: a music player for songs with embedded lyrics. # 79 char long summary
+description: |
+  a music player for songs with embedded lyrics.
+
+  It plays its own format, the l8f format. This format can be created with https://sae.ng/lyrics818
+
+
+grade: stable # must be 'stable' to release into candidate/stable channels
+confinement: strict # use 'strict' once you have the right plugs and slots
+
+architectures:
+  - build-on: amd64
+
+parts:
+  alsa:
+    plugin: nil
+    source: https://github.com/diddledan/snapcraft-alsa.git
+    override-pull: |
+      cat > alsa.conf <<EOF
+      pcm.!default {
+        type pulse
+        fallback "sysdefault"
+        hint {
+          show on
+          description "Default ALSA Output (currently PulseAudio Sound Server)"
+        }
+      }
+      ctl.!default {
+        type pulse
+        fallback "sysdefault"
+      }
+      EOF
+    override-build: |
+      install -m644 -D -t $SNAPCRAFT_PART_INSTALL/etc alsa.conf
+    build-packages:
+      - libasound2-dev
+    stage-packages:
+      - libasound2
+      - libasound2-plugins
+    
+  my-part:
+    # See 'snapcraft plugins'
+    plugin: go
+    source: .
+    build-snaps:
+      - go
+    build-packages:
+      - build-essential
+      - gcc
+      - libgl1-mesa-dev
+      - xorg-dev
+      - libc6-dev
+    stage-packages:
+      - madplay
+      - libao4
+      - libasound2
+      - libmad0
+      - libaudio2
+      - libsndio7.0
+    override-build: |
+      set -xe
+      mkdir -p $SNAPCRAFT_PART_INSTALL/bin/
+      cd $SNAPCRAFT_PART_SRC/linux
+      go mod download
+      go build -o $SNAPCRAFT_PART_INSTALL/bin/songs223 .
+    after:
+      - alsa
+
+apps: 
+  songs223:
+    command: bin/songs223
+    extensions: [gnome]
+    plugs:
+      - alsa
+      - audio-playback
+      - pulseaudio
+    environment:
+      ALSA_CONFIG_PATH: /snap/$SNAPCRAFT_PROJECT_NAME/current/usr/share/alsa/alsa.conf
