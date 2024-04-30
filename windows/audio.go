@@ -9,13 +9,14 @@ import (
 	"github.com/ebitengine/oto/v3"
 	"github.com/hajimehoshi/go-mp3"
 	"github.com/saenuma/lyrics818/l8f"
+	"github.com/saenuma/songs223a/internal"
 )
 
 var GlobalOtoCtx *oto.Context
 var currentPlayer *oto.Player
 
 func playAudio(l8fPath string) {
-	rootPath, _ := GetRootPath()
+	rootPath, _ := internal.GetRootPath()
 
 	audioBytes, err := l8f.ReadAudio(l8fPath)
 	if err != nil {
