@@ -158,7 +158,7 @@ func DrawFirstUI(window *glfw.Window, page int) {
 		aPageBtnH := aStrH + 10
 
 		if i == CurrentPage {
-			ggCtx.SetHexColor("#633232")
+			ggCtx.SetHexColor("#C5BF56")
 		} else {
 			ggCtx.SetHexColor("#633260")
 		}
@@ -192,10 +192,13 @@ func GetDefaultFontPath() string {
 }
 
 func FirstUIScrollCallback(window *glfw.Window, xoff, yoff float64) {
+
 	if scrollEventCount != 5 {
 		scrollEventCount += 1
 		return
 	}
+
+	ObjCoords = make(map[int]g143.RectSpecs)
 
 	scrollEventCount = 0
 

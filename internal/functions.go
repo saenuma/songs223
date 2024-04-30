@@ -121,7 +121,7 @@ func GetFolders(page int) []SongFolder {
 	if len(allFolders) <= PageSize {
 		trueRet = allFolders
 	} else if page == 1 {
-		trueRet = allFolders[:PageSize+1]
+		trueRet = allFolders[:PageSize]
 	} else if endIndex > len(allFolders) {
 		trueRet = allFolders[beginIndex+1:]
 	} else {
