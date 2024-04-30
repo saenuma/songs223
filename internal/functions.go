@@ -2,7 +2,6 @@ package internal
 
 import (
 	"fmt"
-	"io/fs"
 	"math"
 	"math/rand"
 	"os"
@@ -65,18 +64,7 @@ func SecondsToMinutes(inSeconds int) string {
 	return str
 }
 
-func TotalPages() int {
-	rootPath, _ := GetRootPath()
-	dirFIs, err := os.ReadDir(rootPath)
-	if err != nil {
-		fmt.Println(err.Error())
-		return 0
-	}
-
-	return int(math.Ceil(float64(len(dirFIs)) / float64(PageSize)))
-}
-
-func GetFolders(page int) []SongFolder {
+func getAllL8fFolders() []SongFolder {
 	rootPath, _ := GetRootPath()
 	ret := make([]SongFolder, 0)
 
@@ -89,21 +77,7 @@ func GetFolders(page int) []SongFolder {
 	noCoverPath := filepath.Join(os.TempDir(), "no_cover.png")
 	os.WriteFile(noCoverPath, NoCover, 0777)
 
-	beginIndex := (page - 1) * PageSize
-	endIndex := beginIndex + PageSize
-
-	var toCheckDirFIs []fs.DirEntry
-	if len(dirFIs) <= PageSize {
-		toCheckDirFIs = dirFIs
-	} else if page == 1 {
-		toCheckDirFIs = dirFIs[:PageSize+1]
-	} else if endIndex > len(dirFIs) {
-		toCheckDirFIs = dirFIs[beginIndex+1:]
-	} else {
-		toCheckDirFIs = dirFIs[beginIndex+1 : endIndex+1]
-	}
-
-	for _, dirFI := range toCheckDirFIs {
+	for _, dirFI := range dirFIs {
 		if !dirFI.IsDir() || strings.HasPrefix(dirFI.Name(), ".") {
 			continue
 		}
@@ -136,4 +110,27 @@ func GetFolders(page int) []SongFolder {
 	}
 
 	return ret
+}
+
+func GetFolders(page int) []SongFolder {
+	allFolders := getAllL8fFolders()
+	beginIndex := (page - 1) * PageSize
+	endIndex := beginIndex + PageSize
+
+	var trueRet []SongFolder
+	if len(allFolders) <= PageSize {
+		trueRet = allFolders
+	} else if page == 1 {
+		trueRet = allFolders[:PageSize+1]
+	} else if endIndex > len(allFolders) {
+		trueRet = allFolders[beginIndex+1:]
+	} else {
+		trueRet = allFolders[beginIndex+1 : endIndex+1]
+	}
+	return trueRet
+}
+
+func TotalPages() int {
+	allFolders := getAllL8fFolders()
+	return int(math.Ceil(float64(len(allFolders)) / float64(PageSize)))
 }
