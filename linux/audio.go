@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/saenuma/lyrics818/l8f"
+	"github.com/saenuma/songs223a/internal"
 )
 
 var playerCancelFn context.CancelFunc
@@ -24,7 +25,7 @@ func GetMPCommand() string {
 }
 
 func playAudio(l8fPath, seek string) {
-	rootPath, _ := GetRootPath()
+	rootPath, _ := internal.GetRootPath()
 	mplayCmd := GetMPCommand()
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel() // cancel when we are finished consuming integers
