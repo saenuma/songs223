@@ -15,6 +15,7 @@ import (
 	"github.com/fogleman/gg"
 	"github.com/go-gl/glfw/v3.3/glfw"
 	"github.com/saenuma/lyrics818/l8f"
+	"github.com/saenuma/songs223a/internal"
 )
 
 const (
@@ -111,7 +112,7 @@ func getFolders(page int) []SongFolder {
 	}
 
 	noCoverPath := filepath.Join(os.TempDir(), "no_cover.png")
-	os.WriteFile(noCoverPath, NoCover, 0777)
+	os.WriteFile(noCoverPath, internal.NoCover, 0777)
 
 	beginIndex := (page - 1) * pageSize
 	endIndex := beginIndex + pageSize
@@ -338,7 +339,7 @@ func drawFirstUI(window *glfw.Window, page int) {
 
 func getDefaultFontPath() string {
 	fontPath := filepath.Join(os.TempDir(), "s223_font.ttf")
-	os.WriteFile(fontPath, DefaultFont, 0777)
+	os.WriteFile(fontPath, internal.DefaultFont, 0777)
 	return fontPath
 }
 

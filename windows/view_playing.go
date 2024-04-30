@@ -10,6 +10,7 @@ import (
 	"github.com/fogleman/gg"
 	"github.com/go-gl/glfw/v3.3/glfw"
 	"github.com/saenuma/lyrics818/l8f"
+	"github.com/saenuma/songs223a/internal"
 )
 
 var currentPlayingSong SongDesc
@@ -61,11 +62,11 @@ func drawNowPlayingUI(window *glfw.Window, songDesc SongDesc, seconds int) {
 	ggCtx.DrawString(stopTimeStr, float64(wWidth)-50-stopTimeStrW, aStrY)
 
 	// draw controls
-	prevImg, _, _ := image.Decode(bytes.NewReader(PrevBytes))
+	prevImg, _, _ := image.Decode(bytes.NewReader(internal.PrevBytes))
 	prevImg = imaging.Fit(prevImg, boxSize, boxSize, imaging.Lanczos)
-	pauseImg, _, _ := image.Decode(bytes.NewReader(PauseBytes))
+	pauseImg, _, _ := image.Decode(bytes.NewReader(internal.PauseBytes))
 	pauseImg = imaging.Fit(pauseImg, boxSize, boxSize, imaging.Lanczos)
-	nextImg, _, _ := image.Decode(bytes.NewReader(NextBytes))
+	nextImg, _, _ := image.Decode(bytes.NewReader(internal.NextBytes))
 	nextImg = imaging.Fit(nextImg, boxSize, boxSize, imaging.Lanczos)
 
 	controlsY := displayFrameH + 90 + fontSize + 20
@@ -153,7 +154,7 @@ func nowPlayingMouseBtnCallback(window *glfw.Window, button glfw.MouseButton, ac
 			seconds := time.Since(startTime).Seconds()
 			pausedSeconds = int(seconds)
 
-			playImg, _, _ := image.Decode(bytes.NewReader(PlayBytes))
+			playImg, _, _ := image.Decode(bytes.NewReader(internal.PlayBytes))
 			playImg = imaging.Fit(playImg, boxSize, boxSize, imaging.Lanczos)
 
 			ggCtx := gg.NewContextForImage(tmpNowPlayingImg)
