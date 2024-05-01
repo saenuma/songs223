@@ -202,9 +202,9 @@ func FirstUIScrollCallback(window *glfw.Window, xoff, yoff float64) {
 
 	scrollEventCount = 0
 
-	if xoff == 0 && yoff == 1 && CurrentPage != TotalPages() {
+	if xoff == 0 && yoff == -1 && CurrentPage != TotalPages() {
 		DrawFirstUI(window, CurrentPage+1)
-	} else if xoff == 0 && yoff == -1 && CurrentPage != 1 {
+	} else if xoff == 0 && yoff == 1 && CurrentPage != 1 {
 		DrawFirstUI(window, CurrentPage-1)
 	}
 
