@@ -198,13 +198,13 @@ func FirstUIScrollCallback(window *glfw.Window, xoff, yoff float64) {
 		return
 	}
 
-	ObjCoords = make(map[int]g143.RectSpecs)
-
 	scrollEventCount = 0
 
 	if xoff == 0 && yoff == -1 && CurrentPage != TotalPages() {
+		ObjCoords = make(map[int]g143.RectSpecs)
 		DrawFirstUI(window, CurrentPage+1)
 	} else if xoff == 0 && yoff == 1 && CurrentPage != 1 {
+		ObjCoords = make(map[int]g143.RectSpecs)
 		DrawFirstUI(window, CurrentPage-1)
 	}
 
