@@ -60,12 +60,6 @@ parts:
       - libmad0
       - libaudio2
       - libsndio7.0
-    override-build: |
-      set -xe
-      mkdir -p $SNAPCRAFT_PART_INSTALL/bin/
-      cd $SNAPCRAFT_PART_SRC/linux
-      go mod download
-      go build -o $SNAPCRAFT_PART_INSTALL/bin/songs223 .
     after:
       - alsa
 

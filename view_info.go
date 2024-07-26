@@ -1,4 +1,4 @@
-package internal
+package main
 
 import (
 	g143 "github.com/bankole7782/graphics143"
