@@ -36,7 +36,7 @@ func DrawTopBar(window *glfw.Window) *gg.Context {
 	foldersBtnH := foldersStrH + 30
 	ggCtx.SetHexColor("#B75F5F")
 	foldersBtnX := 200
-	ggCtx.DrawRoundedRectangle(float64(foldersBtnX), 10, foldersBtnW, foldersBtnH, foldersBtnH/2)
+	ggCtx.DrawRectangle(float64(foldersBtnX), 10, foldersBtnW, foldersBtnH)
 	ggCtx.Fill()
 
 	foldersBtnRS := g143.NRectSpecs(foldersBtnX, 10, int(foldersBtnW), int(foldersBtnH))
@@ -56,7 +56,7 @@ func DrawTopBar(window *glfw.Window) *gg.Context {
 	npBtnH := npStrH + 30
 	npBtnX := foldersBtnW + float64(foldersBtnRS.OriginX) + 20
 	ggCtx.SetHexColor("#81577F")
-	ggCtx.DrawRoundedRectangle(npBtnX, 10, npBtnW, npBtnH, npBtnH/2)
+	ggCtx.DrawRectangle(npBtnX, 10, npBtnW, npBtnH)
 	ggCtx.Fill()
 
 	npRS := g143.NRectSpecs(int(npBtnX), 10, int(npBtnW), int(npBtnH))
@@ -70,13 +70,13 @@ func DrawTopBar(window *glfw.Window) *gg.Context {
 	ggCtx.Fill()
 
 	// Open Working Directory button
-	owdStr := "Open Working Directory"
+	owdStr := "Open Songs223 Folder"
 	owdStrWidth, owdStrHeight := ggCtx.MeasureString(owdStr)
 	openWDBtnWidth := owdStrWidth + 60
 	openWDBtnHeight := owdStrHeight + 30
 	ggCtx.SetHexColor("#56845A")
 	openWDBtnOriginX := float64(npRS.OriginX+npRS.Width) + 20
-	ggCtx.DrawRoundedRectangle(openWDBtnOriginX, 10, openWDBtnWidth, openWDBtnHeight, openWDBtnHeight/2)
+	ggCtx.DrawRectangle(openWDBtnOriginX, 10, openWDBtnWidth, openWDBtnHeight)
 	ggCtx.Fill()
 
 	openWDBtnRS := g143.RectSpecs{Width: int(openWDBtnWidth), Height: int(openWDBtnHeight),
@@ -93,7 +93,7 @@ func DrawTopBar(window *glfw.Window) *gg.Context {
 	ifBtnH := ifStrH + 30
 	ggCtx.SetHexColor("#B19644")
 	renderBtnX := openWDBtnRS.OriginX + openWDBtnRS.Width + 20
-	ggCtx.DrawRoundedRectangle(float64(renderBtnX), 10, ifBtnW, ifBtnH, ifBtnH/2)
+	ggCtx.DrawRectangle(float64(renderBtnX), 10, ifBtnW, ifBtnH)
 	ggCtx.Fill()
 
 	rbRS := g143.RectSpecs{OriginX: renderBtnX, OriginY: 10, Width: int(ifBtnW),
@@ -162,7 +162,7 @@ func DrawFirstUI(window *glfw.Window, page int) {
 		} else {
 			ggCtx.SetHexColor("#633260")
 		}
-		ggCtx.DrawRoundedRectangle(float64(aPageCurrentX), float64(aPageCurrentY), aPageBtnW, aPageBtnH, 5)
+		ggCtx.DrawRectangle(float64(aPageCurrentX), float64(aPageCurrentY), aPageBtnW, aPageBtnH)
 		ggCtx.Fill()
 
 		ggCtx.SetHexColor("#fff")
