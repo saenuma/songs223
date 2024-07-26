@@ -129,7 +129,7 @@ func folderUIMouseBtnCallback(window *glfw.Window, button glfw.MouseButton, acti
 		window.SetMouseButtonCallback(nowPlayingMouseBtnCallback)
 
 		StartTime = time.Now()
-		go playAudio(songDesc.SongPath, "00:00:00")
+		go playAudio(songDesc.SongPath)
 	}
 
 }
@@ -164,8 +164,8 @@ func nowPlayingMouseBtnCallback(window *glfw.Window, button glfw.MouseButton, ac
 
 	switch widgetCode {
 	case PrevBtn:
-		if playerCancelFn != nil {
-			playerCancelFn()
+		if currentPlayer != nil {
+			currentPlayer.Pause()
 		}
 
 		ObjCoords = make(map[int]g143.RectSpecs)
@@ -184,7 +184,7 @@ func nowPlayingMouseBtnCallback(window *glfw.Window, button glfw.MouseButton, ac
 			window.SetMouseButtonCallback(nowPlayingMouseBtnCallback)
 
 			StartTime = time.Now()
-			go playAudio(songDesc.SongPath, "00:00:00")
+			go playAudio(songDesc.SongPath)
 		} else {
 			IsOutsidePlayer = true
 			DrawFolderUI(window, CurrentSongFolder)
@@ -192,9 +192,9 @@ func nowPlayingMouseBtnCallback(window *glfw.Window, button glfw.MouseButton, ac
 		}
 
 	case PlayPauseBtn:
-		if playerCancelFn != nil {
-			playerCancelFn()
-			playerCancelFn = nil
+		if currentPlayer != nil && currentPlayer.IsPlaying() {
+			currentPlayer.Pause()
+
 			seconds := time.Since(StartTime).Seconds()
 			PausedSeconds = int(seconds)
 
@@ -219,12 +219,12 @@ func nowPlayingMouseBtnCallback(window *glfw.Window, button glfw.MouseButton, ac
 			startTimeUnix := time.Now().Unix() - int64(PausedSeconds)
 			StartTime = time.Unix(startTimeUnix, 0)
 
-			go playAudio(CurrentPlayingSong.SongPath, "00:"+SecondsToMinutes(PausedSeconds))
+			go continueAudio()
 		}
 
 	case NextBtn:
-		if playerCancelFn != nil {
-			playerCancelFn()
+		if currentPlayer != nil {
+			currentPlayer.Pause()
 		}
 
 		ObjCoords = make(map[int]g143.RectSpecs)
@@ -243,7 +243,7 @@ func nowPlayingMouseBtnCallback(window *glfw.Window, button glfw.MouseButton, ac
 			window.SetMouseButtonCallback(nowPlayingMouseBtnCallback)
 
 			StartTime = time.Now()
-			go playAudio(songDesc.SongPath, "00:00:00")
+			go playAudio(songDesc.SongPath)
 		} else {
 			IsOutsidePlayer = true
 			DrawFolderUI(window, CurrentSongFolder)

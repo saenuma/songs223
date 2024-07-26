@@ -24,12 +24,6 @@ func main() {
 	// respond to mouse movements
 	window.SetCursorPosCallback(curPosCB)
 
-	window.SetCloseCallback(func(w *glfw.Window) {
-		if runtime.GOOS == "linux" && playerCancelFn != nil {
-			playerCancelFn()
-		}
-	})
-
 	window.SetScrollCallback(FirstUIScrollCallback)
 
 	for !window.ShouldClose() {
@@ -37,7 +31,7 @@ func main() {
 		glfw.PollEvents()
 
 		// update UI if song is playing
-		if CurrentPlayingSong.SongName != "" && !IsOutsidePlayer && playerCancelFn != nil {
+		if CurrentPlayingSong.SongName != "" && !IsOutsidePlayer && currentPlayer != nil && currentPlayer.IsPlaying() {
 			seconds := time.Since(StartTime).Seconds()
 			secondsInt := int(math.Floor(seconds))
 			if secondsInt != CurrentPlaySeconds {
@@ -63,7 +57,7 @@ func main() {
 					window.SetMouseButtonCallback(nowPlayingMouseBtnCallback)
 
 					StartTime = time.Now()
-					go playAudio(songDesc.SongPath, "00:00:00")
+					go playAudio(songDesc.SongPath)
 				} else {
 					IsOutsidePlayer = true
 					DrawFolderUI(window, CurrentSongFolder)
