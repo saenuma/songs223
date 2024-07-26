@@ -55,11 +55,8 @@ parts:
       - libc6-dev
       - libasound2-dev
     stage-packages:
-      - libao4
       - libasound2
-      - libmad0
-      - libaudio2
-      - libsndio7.0
+      - libasound2-plugins
     override-build: |
       set -xe
       mkdir -p $SNAPCRAFT_PART_INSTALL/bin/
@@ -75,6 +72,5 @@ apps:
     plugs:
       - alsa
       - audio-playback
-      - pulseaudio
     environment:
       ALSA_CONFIG_PATH: /snap/$SNAPCRAFT_PROJECT_NAME/current/usr/share/alsa/alsa.conf
