@@ -74,4 +74,7 @@ func DrawFolderUI(window *glfw.Window, songFolder SongFolder) {
 	windowRS := g143.RectSpecs{Width: wWidth, Height: wHeight, OriginX: 0, OriginY: 0}
 	g143.DrawImage(wWidth, wHeight, ggCtx.Image(), windowRS)
 	window.SwapBuffers()
+
+	// save the frame
+	currentWindowFrame = ggCtx.Image()
 }

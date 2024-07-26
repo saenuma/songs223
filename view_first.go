@@ -183,6 +183,9 @@ func DrawFirstUI(window *glfw.Window, page int) {
 	windowRS := g143.RectSpecs{Width: wWidth, Height: wHeight, OriginX: 0, OriginY: 0}
 	g143.DrawImage(wWidth, wHeight, ggCtx.Image(), windowRS)
 	window.SwapBuffers()
+
+	// save the frame
+	currentWindowFrame = ggCtx.Image()
 }
 
 func GetDefaultFontPath() string {
