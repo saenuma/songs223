@@ -53,5 +53,6 @@ var (
 
 	CurrentPlayingSong SongDesc
 	PausedSeconds      int
+	CurrentPlaySeconds int
 	TmpNowPlayingImg   image.Image
 )
