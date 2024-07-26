@@ -57,6 +57,7 @@ parts:
     stage-packages:
       - libasound2
       - libasound2-plugins
+      - yad
     override-build: |
       set -xe
       mkdir -p $SNAPCRAFT_PART_INSTALL/bin/
