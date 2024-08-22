@@ -57,6 +57,7 @@ func DrawFolderUI(window *glfw.Window, songFolder SongFolder) {
 	// songs UI
 	songs := GetSongs(songFolder)
 	currentY := 80 + 40 + 30
+	songsX += 20
 	for i, songDesc := range songs {
 		ggCtx.SetHexColor("#444")
 		ggCtx.DrawString(songDesc.SongName, float64(songsX), float64(currentY)+FontSize)
@@ -65,9 +66,9 @@ func DrawFolderUI(window *glfw.Window, songFolder SongFolder) {
 		sLW, _ := ggCtx.MeasureString(songDesc.Length)
 		ggCtx.DrawString(songDesc.Length, float64(wWidth)-sLW-40, float64(currentY)+FontSize)
 
-		aSongRS := g143.NRectSpecs(songsX, currentY, wWidth-40, FontSize)
+		aSongRS := g143.NRectSpecs(songsX-10, currentY-5, 800, FontSize+15)
 		ObjCoords[4000+i+1] = aSongRS
-		currentY += 60
+		currentY += 40
 	}
 
 	// send the frame to glfw window
