@@ -1,6 +1,7 @@
 package main
 
 import (
+	"math"
 	"runtime"
 	"time"
 
@@ -31,8 +32,10 @@ func main() {
 		// update UI if song is playing
 		if internal.CurrentPlayingSong.SongName != "" && !internal.IsOutsidePlayer && currentPlayer != nil && currentPlayer.IsPlaying() {
 			seconds := time.Since(internal.StartTime).Seconds()
-			// playTime.SetText(SecondsToMinutes(int(seconds)))
-			internal.DrawNowPlayingUI(window, internal.CurrentPlayingSong, int(seconds))
+			secondsInt := int(math.Floor(seconds))
+			if secondsInt != internal.CurrentPlaySeconds {
+				internal.DrawNowPlayingUI(window, internal.CurrentPlayingSong, secondsInt)
+			}
 		}
 
 		// play next song or stop

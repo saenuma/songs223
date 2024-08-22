@@ -11,10 +11,11 @@ import (
 )
 
 func DrawNowPlayingUI(window *glfw.Window, songDesc SongDesc, seconds int) {
-	IsOutsidePlayer = false
 	wWidth, wHeight := window.GetSize()
 
+	IsOutsidePlayer = false
 	CurrentPlayingSong = songDesc
+	CurrentPlaySeconds = seconds
 
 	ggCtx := DrawTopBar(window)
 
