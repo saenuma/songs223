@@ -1,4 +1,4 @@
-package main
+package internal
 
 import (
 	"image"
@@ -20,7 +20,7 @@ type SongDesc struct {
 }
 
 const (
-	FPS      = 24
+	FPS      = 4
 	FontSize = 20
 	PageSize = 8
 
@@ -41,18 +41,15 @@ const (
 )
 
 var (
-	ObjCoords          map[int]g143.RectSpecs
-	CurrentPage        int
-	IsOutsidePlayer    bool
-	scrollEventCount   = 0
-	cursorEventsCount  int
-	currentWindowFrame image.Image
+	ObjCoords        map[int]g143.RectSpecs
+	CurrentPage      int
+	IsOutsidePlayer  bool
+	scrollEventCount = 0
 
 	CurrentSongFolder SongFolder
 	StartTime         time.Time
 
 	CurrentPlayingSong SongDesc
 	PausedSeconds      int
-	CurrentPlaySeconds int
 	TmpNowPlayingImg   image.Image
 )

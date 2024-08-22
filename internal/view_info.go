@@ -1,4 +1,4 @@
-package main
+package internal
 
 import (
 	g143 "github.com/bankole7782/graphics143"
@@ -51,6 +51,4 @@ func DrawInfoUI(window *glfw.Window) {
 	g143.DrawImage(wWidth, wHeight, ggCtx.Image(), windowRS)
 	window.SwapBuffers()
 
-	// save the frame
-	currentWindowFrame = ggCtx.Image()
 }
