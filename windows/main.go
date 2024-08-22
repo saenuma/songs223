@@ -22,6 +22,7 @@ func main() {
 	// respond to the mouse
 	window.SetMouseButtonCallback(mouseBtnCallback)
 	window.SetScrollCallback(internal.FirstUIScrollCallback)
+	window.SetCursorPosCallback(internal.CurPosCB)
 
 	for !window.ShouldClose() {
 		t := time.Now()

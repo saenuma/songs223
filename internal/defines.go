@@ -20,7 +20,7 @@ type SongDesc struct {
 }
 
 const (
-	FPS      = 4
+	FPS      = 24
 	FontSize = 20
 	PageSize = 8
 
@@ -41,10 +41,12 @@ const (
 )
 
 var (
-	ObjCoords        map[int]g143.RectSpecs
-	CurrentPage      int
-	IsOutsidePlayer  bool
-	scrollEventCount = 0
+	ObjCoords          map[int]g143.RectSpecs
+	CurrentPage        int
+	IsOutsidePlayer    bool
+	scrollEventCount   = 0
+	cursorEventsCount  int
+	currentWindowFrame image.Image
 
 	CurrentSongFolder SongFolder
 	StartTime         time.Time

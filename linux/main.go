@@ -19,15 +19,15 @@ func main() {
 	window := g143.NewWindow(1200, 800, "Songs223: media player of songs with embedded lyrics", false)
 	internal.DrawFirstUI(window, 1)
 
-	// respond to the mouse
-	window.SetMouseButtonCallback(mouseBtnCallback)
-
 	window.SetCloseCallback(func(w *glfw.Window) {
 		if runtime.GOOS == "linux" && playerCancelFn != nil {
 			playerCancelFn()
 		}
 	})
 
+	// respond to the mouse
+	window.SetMouseButtonCallback(mouseBtnCallback)
+	window.SetCursorPosCallback(internal.CurPosCB)
 	window.SetScrollCallback(internal.FirstUIScrollCallback)
 
 	for !window.ShouldClose() {
