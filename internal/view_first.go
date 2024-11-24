@@ -35,7 +35,7 @@ func DrawTopBar(window *glfw.Window) *gg.Context {
 	foldersBtnW := foldersStrW + 80
 	foldersBtnH := foldersStrH + 30
 	ggCtx.SetHexColor("#B75F5F")
-	foldersBtnX := 200
+	foldersBtnX := 280
 	ggCtx.DrawRectangle(float64(foldersBtnX), 10, foldersBtnW, foldersBtnH)
 	ggCtx.Fill()
 
@@ -70,7 +70,7 @@ func DrawTopBar(window *glfw.Window) *gg.Context {
 	ggCtx.Fill()
 
 	// Open Working Directory button
-	owdStr := "Open Songs223 Folder"
+	owdStr := "Open Folder"
 	owdStrWidth, owdStrHeight := ggCtx.MeasureString(owdStr)
 	openWDBtnWidth := owdStrWidth + 60
 	openWDBtnHeight := owdStrHeight + 30
