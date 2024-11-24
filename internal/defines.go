@@ -41,7 +41,7 @@ const (
 )
 
 var (
-	ObjCoords          map[int]g143.RectSpecs
+	ObjCoords          map[int]g143.Rect
 	CurrentPage        int
 	IsOutsidePlayer    bool
 	scrollEventCount   = 0

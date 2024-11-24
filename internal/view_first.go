@@ -39,7 +39,7 @@ func DrawTopBar(window *glfw.Window) *gg.Context {
 	ggCtx.DrawRectangle(float64(foldersBtnX), 10, foldersBtnW, foldersBtnH)
 	ggCtx.Fill()
 
-	foldersBtnRS := g143.NRectSpecs(foldersBtnX, 10, int(foldersBtnW), int(foldersBtnH))
+	foldersBtnRS := g143.NewRect(foldersBtnX, 10, int(foldersBtnW), int(foldersBtnH))
 	ObjCoords[FoldersViewBtn] = foldersBtnRS
 
 	ggCtx.SetHexColor("#fff")
@@ -59,7 +59,7 @@ func DrawTopBar(window *glfw.Window) *gg.Context {
 	ggCtx.DrawRectangle(npBtnX, 10, npBtnW, npBtnH)
 	ggCtx.Fill()
 
-	npRS := g143.NRectSpecs(int(npBtnX), 10, int(npBtnW), int(npBtnH))
+	npRS := g143.NewRect(int(npBtnX), 10, int(npBtnW), int(npBtnH))
 	ObjCoords[NowPlayingViewBtn] = npRS
 
 	ggCtx.SetHexColor("#fff")
@@ -79,7 +79,7 @@ func DrawTopBar(window *glfw.Window) *gg.Context {
 	ggCtx.DrawRectangle(openWDBtnOriginX, 10, openWDBtnWidth, openWDBtnHeight)
 	ggCtx.Fill()
 
-	openWDBtnRS := g143.RectSpecs{Width: int(openWDBtnWidth), Height: int(openWDBtnHeight),
+	openWDBtnRS := g143.Rect{Width: int(openWDBtnWidth), Height: int(openWDBtnHeight),
 		OriginX: int(openWDBtnOriginX), OriginY: 10}
 	ObjCoords[OpenWDBtn] = openWDBtnRS
 
@@ -96,7 +96,7 @@ func DrawTopBar(window *glfw.Window) *gg.Context {
 	ggCtx.DrawRectangle(float64(renderBtnX), 10, ifBtnW, ifBtnH)
 	ggCtx.Fill()
 
-	rbRS := g143.RectSpecs{OriginX: renderBtnX, OriginY: 10, Width: int(ifBtnW),
+	rbRS := g143.Rect{OriginX: renderBtnX, OriginY: 10, Width: int(ifBtnW),
 		Height: int(ifBtnH)}
 	ObjCoords[InfoBtn] = rbRS
 
@@ -134,7 +134,7 @@ func DrawFirstUI(window *glfw.Window, page int) {
 		ggCtx.DrawString(songFolder.Title, float64(currentX)+20, float64(currentY)+FontSize+float64(boxDimension))
 		ggCtx.DrawString(songCountStr, float64(currentX)+20, float64(currentY)+FontSize*2+float64(boxDimension))
 
-		aSongRS := g143.NRectSpecs(currentX, currentY, boxDimension, boxDimension+50)
+		aSongRS := g143.NewRect(currentX, currentY, boxDimension, boxDimension+50)
 		ObjCoords[2000+i+1] = aSongRS
 
 		newX := currentX + boxDimension + gutter + 20
@@ -168,7 +168,7 @@ func DrawFirstUI(window *glfw.Window, page int) {
 		ggCtx.SetHexColor("#fff")
 		ggCtx.DrawString(aStr, 5+float64(aPageCurrentX), float64(aPageCurrentY)+FontSize)
 
-		aPageBtnRS := g143.NRectSpecs(aPageCurrentX, aPageCurrentY, int(aPageBtnW), int(aPageBtnH))
+		aPageBtnRS := g143.NewRect(aPageCurrentX, aPageCurrentY, int(aPageBtnW), int(aPageBtnH))
 		ObjCoords[3000+i] = aPageBtnRS
 		newX := aPageCurrentX + int(aPageBtnW) + aPageGutter
 		if newX > (wWidth - int(aPageBtnW)) {
@@ -180,7 +180,7 @@ func DrawFirstUI(window *glfw.Window, page int) {
 	}
 
 	// send the frame to glfw window
-	windowRS := g143.RectSpecs{Width: wWidth, Height: wHeight, OriginX: 0, OriginY: 0}
+	windowRS := g143.Rect{Width: wWidth, Height: wHeight, OriginX: 0, OriginY: 0}
 	g143.DrawImage(wWidth, wHeight, ggCtx.Image(), windowRS)
 	window.SwapBuffers()
 
@@ -204,10 +204,10 @@ func FirstUIScrollCallback(window *glfw.Window, xoff, yoff float64) {
 	scrollEventCount = 0
 
 	if xoff == 0 && yoff == -1 && CurrentPage != TotalPages() {
-		ObjCoords = make(map[int]g143.RectSpecs)
+		ObjCoords = make(map[int]g143.Rect)
 		DrawFirstUI(window, CurrentPage+1)
 	} else if xoff == 0 && yoff == 1 && CurrentPage != 1 {
-		ObjCoords = make(map[int]g143.RectSpecs)
+		ObjCoords = make(map[int]g143.Rect)
 		DrawFirstUI(window, CurrentPage-1)
 	}
 

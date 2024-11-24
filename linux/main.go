@@ -15,7 +15,7 @@ func main() {
 	runtime.LockOSThread()
 
 	internal.GetRootPath()
-	internal.ObjCoords = make(map[int]g143.RectSpecs)
+	internal.ObjCoords = make(map[int]g143.Rect)
 
 	window := g143.NewWindow(1200, 800, "Songs223: media player of songs with embedded lyrics", false)
 	internal.DrawFirstUI(window, 1)

@@ -23,13 +23,13 @@ func CurPosCB(window *glfw.Window, xpos, ypos float64) {
 
 	wWidth, wHeight := window.GetSize()
 
-	var widgetRS g143.RectSpecs
+	var widgetRS g143.Rect
 	var widgetCode int
 
 	xPosInt := int(xpos)
 	yPosInt := int(ypos)
 	for code, RS := range ObjCoords {
-		if g143.InRectSpecs(RS, xPosInt, yPosInt) {
+		if g143.InRect(RS, xPosInt, yPosInt) {
 			widgetRS = RS
 			widgetCode = code
 			break
@@ -38,7 +38,7 @@ func CurPosCB(window *glfw.Window, xpos, ypos float64) {
 
 	if widgetCode == 0 {
 		// send the last drawn frame to glfw window
-		windowRS := g143.RectSpecs{Width: wWidth, Height: wHeight, OriginX: 0, OriginY: 0}
+		windowRS := g143.Rect{Width: wWidth, Height: wHeight, OriginX: 0, OriginY: 0}
 		g143.DrawImage(wWidth, wHeight, currentWindowFrame, windowRS)
 		window.SwapBuffers()
 		return
@@ -55,7 +55,7 @@ func CurPosCB(window *glfw.Window, xpos, ypos float64) {
 	ggCtx.DrawImage(invertedPiece, widgetRS.OriginX, widgetRS.OriginY)
 
 	// send the frame to glfw window
-	windowRS := g143.RectSpecs{Width: wWidth, Height: wHeight, OriginX: 0, OriginY: 0}
+	windowRS := g143.Rect{Width: wWidth, Height: wHeight, OriginX: 0, OriginY: 0}
 	g143.DrawImage(wWidth, wHeight, ggCtx.Image(), windowRS)
 	window.SwapBuffers()
 }

@@ -66,13 +66,13 @@ func DrawFolderUI(window *glfw.Window, songFolder SongFolder) {
 		sLW, _ := ggCtx.MeasureString(songDesc.Length)
 		ggCtx.DrawString(songDesc.Length, float64(wWidth)-sLW-40, float64(currentY)+FontSize)
 
-		aSongRS := g143.NRectSpecs(songsX-10, currentY-5, 800, FontSize+15)
+		aSongRS := g143.NewRect(songsX-10, currentY-5, 800, FontSize+15)
 		ObjCoords[4000+i+1] = aSongRS
 		currentY += 40
 	}
 
 	// send the frame to glfw window
-	windowRS := g143.RectSpecs{Width: wWidth, Height: wHeight, OriginX: 0, OriginY: 0}
+	windowRS := g143.Rect{Width: wWidth, Height: wHeight, OriginX: 0, OriginY: 0}
 	g143.DrawImage(wWidth, wHeight, ggCtx.Image(), windowRS)
 	window.SwapBuffers()
 

@@ -55,22 +55,22 @@ func DrawNowPlayingUI(window *glfw.Window, songDesc SongDesc, seconds int) {
 
 	controlsY := displayFrameH + 90 + FontSize + 20
 	ggCtx.DrawImage(prevImg, 500, controlsY)
-	prevRS := g143.NRectSpecs(500, controlsY, BoxSize, BoxSize)
+	prevRS := g143.NewRect(500, controlsY, BoxSize, BoxSize)
 	ObjCoords[PrevBtn] = prevRS
 
 	ggCtx.DrawImage(pauseImg, 600, controlsY)
-	pauseRS := g143.NRectSpecs(600, controlsY, BoxSize, BoxSize)
+	pauseRS := g143.NewRect(600, controlsY, BoxSize, BoxSize)
 	ObjCoords[PlayPauseBtn] = pauseRS
 
 	ggCtx.DrawImage(nextImg, 700, controlsY)
-	nextRS := g143.NRectSpecs(700, controlsY, BoxSize, BoxSize)
+	nextRS := g143.NewRect(700, controlsY, BoxSize, BoxSize)
 	ObjCoords[NextBtn] = nextRS
 
 	// save the frame
 	TmpNowPlayingImg = ggCtx.Image()
 
 	// send the frame to glfw window
-	windowRS := g143.RectSpecs{Width: wWidth, Height: wHeight, OriginX: 0, OriginY: 0}
+	windowRS := g143.Rect{Width: wWidth, Height: wHeight, OriginX: 0, OriginY: 0}
 	g143.DrawImage(wWidth, wHeight, ggCtx.Image(), windowRS)
 	window.SwapBuffers()
 

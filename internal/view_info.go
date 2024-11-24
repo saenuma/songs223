@@ -25,7 +25,7 @@ func DrawInfoUI(window *glfw.Window) {
 	lStrW, lStrH := ggCtx.MeasureString("lyrics818")
 	lStrY := infoY + 60 + FontSize + 10
 	ggCtx.DrawRoundedRectangle(60, float64(lStrY), lStrW+20, lStrH+20, 4)
-	ObjCoords[Lyrics818Link] = g143.NRectSpecs(60, lStrY, int(lStrW)+20, int(lStrH)+20)
+	ObjCoords[Lyrics818Link] = g143.NewRect(60, lStrY, int(lStrW)+20, int(lStrH)+20)
 	ggCtx.Fill()
 
 	ggCtx.SetHexColor("#fff")
@@ -42,12 +42,12 @@ func DrawInfoUI(window *glfw.Window) {
 	ggCtx.SetHexColor("#444")
 	ggCtx.DrawRoundedRectangle(60, float64(sStrY), sStrW+20, sStrH+20, 4)
 	ggCtx.Fill()
-	ObjCoords[SaeNgLink] = g143.NRectSpecs(60, sStrY, int(sStrW)+20, int(sStrH)+20)
+	ObjCoords[SaeNgLink] = g143.NewRect(60, sStrY, int(sStrW)+20, int(sStrH)+20)
 	ggCtx.SetHexColor("#fff")
 	ggCtx.DrawString(sStr, 70, float64(sStrY)+FontSize+5)
 
 	// send the frame to glfw window
-	windowRS := g143.RectSpecs{Width: wWidth, Height: wHeight, OriginX: 0, OriginY: 0}
+	windowRS := g143.Rect{Width: wWidth, Height: wHeight, OriginX: 0, OriginY: 0}
 	g143.DrawImage(wWidth, wHeight, ggCtx.Image(), windowRS)
 	window.SwapBuffers()
 
