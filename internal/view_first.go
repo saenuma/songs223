@@ -102,10 +102,6 @@ func DrawTopBar(window *glfw.Window) *gg.Context {
 
 	ggCtx.SetHexColor("#fff")
 	ggCtx.DrawString(ifStr, float64(rbRS.OriginX)+30, 10+ifStrH+15)
-	// draw end of topbar demarcation
-	ggCtx.SetHexColor("#999")
-	ggCtx.DrawRectangle(10, float64(openWDBtnRS.OriginY+openWDBtnRS.Height+10), float64(wWidth)-20, 2)
-	ggCtx.Fill()
 
 	return ggCtx
 }

@@ -51,4 +51,6 @@ func DrawInfoUI(window *glfw.Window) {
 	g143.DrawImage(wWidth, wHeight, ggCtx.Image(), windowRS)
 	window.SwapBuffers()
 
+	// save the frame
+	currentWindowFrame = ggCtx.Image()
 }
